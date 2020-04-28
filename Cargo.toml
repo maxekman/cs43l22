@@ -15,6 +15,6 @@ description = "Driver for Cirrus Logic CS43L22 Stereo DAC with headphone amp"
 # TODO: Update version when I2S proposal is finalized:
 # https://github.com/rust-embedded/embedded-hal/pull/204
 # version = "0.2.3"
-# git = "https://github.com/eldruin/embedded-hal/"
-# branch = "i2s-v2.0.x"
-path = "../embedded-hal"
+git = "https://github.com/eldruin/embedded-hal/"
+branch = "i2s"
+# path = "../embedded-hal"

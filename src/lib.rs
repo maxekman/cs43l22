@@ -17,7 +17,7 @@ use crate::register::{OutputDevice, Register};
 use embedded_hal::{
     blocking::delay::DelayMs,
     blocking::i2c::{Read, Write, WriteRead},
-    digital::v2::OutputPin,
+    digital::OutputPin,
 };
 
 /// CS43L22 I2C address (shifted because addresses are 7 bit).
@@ -69,10 +69,10 @@ where
 
         // TODO: Check real delay time, this uses the same as CMCIS examples.
         // let _ = cs43l22.reset_pin.set_low().and(Error::NotInitialized);
-        let _ = cs43l22.reset_pin.set_low();
-        let _ = delay.delay_ms(5);
-        let _ = cs43l22.reset_pin.set_high();
-        let _ = delay.delay_ms(5);
+        let _ = cs43l22.reset_pin.try_set_low();
+        let _ = delay.try_delay_ms(5);
+        let _ = cs43l22.reset_pin.try_set_high();
+        let _ = delay.try_delay_ms(5);
 
         // Ensure we have the correct device ID for the CS43L22.
         let id = cs43l22.get_device_id()?;
@@ -149,7 +149,7 @@ where
         value: V,
     ) -> Result<(), Error<I2CERR>> {
         self.i2c
-            .write(ADDRESS, &[addr.into(), value.into()])
+            .try_write(ADDRESS, &[addr.into(), value.into()])
             .map_err(Error::I2C)
     }
 
@@ -157,7 +157,7 @@ where
     pub fn read_reg<T: Into<u8>>(&mut self, addr: T) -> Result<u8, Error<I2CERR>> {
         let mut buf = [0u8; 1];
         self.i2c
-            .write_read(ADDRESS, &[addr.into()], &mut buf)
+            .try_write_read(ADDRESS, &[addr.into()], &mut buf)
             .map_err(Error::I2C)
             .and(Ok(buf[0]))
     }
